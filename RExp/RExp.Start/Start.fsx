@@ -31,7 +31,20 @@ type IrisClass =
     |Versicolour
     |Virginica
     
-type Iris = CsvProvider<"http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data", HasHeaders = false, Schema = "SepalLength,SepalWidth,PetalLength,PetalWidth,Name">
+type Iris = CsvProvider<"http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data", HasHeaders = false, Schema = "SepalLength(float),SepalWidth(float),PetalLength(float),PetalWidth(float),Name">
 let iris = Iris.Load("http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data")
 let first = iris.Rows |> Seq.head
-first.Name
+let sl = iris.Rows |> Seq.map(fun r->r.SepalLength) 
+let sw = iris.Rows |> Seq.map(fun r->r.SepalWidth) 
+let pl = iris.Rows |> Seq.map(fun r->r.PetalLength)
+let pw = iris.Rows |> Seq.map(fun r->r.PetalWidth)
+namedParams [
+    "x", box sl;
+    "y", box sw;
+    "col", box "#FF3300"]    
+|> R.plot
+namedParams [
+    "x", box pl;
+    "y", box pw;
+    "col", box "#33FF00"]    
+|> R.plot
