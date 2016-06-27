@@ -8,6 +8,8 @@ open RDotNet
 open RProvider
 open RProvider.graphics
 open RProvider.``base``
+open RProvider.ggvis
+open RProvider.magrittr
 open FSharp.Data
 
 let wb = WorldBankData.GetDataContext()
@@ -34,6 +36,7 @@ type IrisClass =
 type Iris = CsvProvider<"http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data", HasHeaders = false, Schema = "SepalLength(float),SepalWidth(float),PetalLength(float),PetalWidth(float),Name">
 let iris = Iris.Load("http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data")
 let first = iris.Rows |> Seq.head
+
 let sl = iris.Rows |> Seq.map(fun r->r.SepalLength) 
 let sw = iris.Rows |> Seq.map(fun r->r.SepalWidth) 
 let pl = iris.Rows |> Seq.map(fun r->r.PetalLength)
@@ -41,10 +44,13 @@ let pw = iris.Rows |> Seq.map(fun r->r.PetalWidth)
 namedParams [
     "x", box sl;
     "y", box sw;
-    "col", box "#FF3300"]    
+    "col", box "1"]    
 |> R.plot
+namedParams [
+    "new", box "T"]
+|> R.par
 namedParams [
     "x", box pl;
     "y", box pw;
-    "col", box "#33FF00"]    
+    "col", box "2"]    
 |> R.plot
